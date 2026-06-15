@@ -2,6 +2,7 @@
 
 [ext_resource type="PackedScene" uid="uid://cmn4jie51v55l" path="res://scenes/Viewport3D.tscn" id="1_elqb8"]
 [ext_resource type="PackedScene" uid="uid://bxymxbcipuxd3" path="res://scenes/ui/BlockCatalog.tscn" id="2_rvslj"]
+[ext_resource type="PackedScene" uid="uid://ckyit8i24xfxs" path="res://scenes/ui/MaterialsPanel.tscn" id="3_0bbpv"]
 
 [node name="Node" type="Node" unique_id=844077303]
 
@@ -13,5 +14,13 @@ layer = 2
 [node name="BlockCatalog" parent="CanvasLayer" unique_id=137198268 instance=ExtResource("2_rvslj")]
 offset_right = 400.0
 
+[node name="MaterialsPanel" parent="CanvasLayer" unique_id=2135652470 instance=ExtResource("3_0bbpv")]
+anchors_preset = 11
+anchor_left = 1.0
+offset_left = -94.0
+grow_horizontal = 0
+
+[connection signal="block_placed" from="Viewport3D" to="CanvasLayer/MaterialsPanel" method="_on_viewport_3d_block_placed"]
+[connection signal="block_removed" from="Viewport3D" to="CanvasLayer/MaterialsPanel" method="_on_viewport_3d_block_removed"]
 [connection signal="block_selected" from="CanvasLayer/BlockCatalog" to="Viewport3D" method="_on_block_catalog_block_selected"]
 [connection signal="size_changed" from="CanvasLayer/BlockCatalog" to="Viewport3D" method="_on_block_catalog_size_changed"]

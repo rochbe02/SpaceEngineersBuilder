@@ -47,7 +47,8 @@ func _get_cell_at_mouse(mouse_pos: Vector2):
 	var result = space.intersect_ray(query)
 	
 	if result and result.size() > 0:
-		var hit_pos = result.position + result.normal * 0.5
+		var offset = grid_map.cell_size.x * 0.5
+		var hit_pos = result.position + result.normal * offset
 		return grid_map.local_to_map(hit_pos)
 	else:
 		if direction.y == 0:
@@ -71,9 +72,9 @@ func _handle_click(mouse_pos: Vector2):
 func _place_block(cell: Vector3i):
 	var item = grid_map.mesh_library.find_item_by_name("MeshInstance3D")
 	grid_map.set_cell_item(cell, item)
-	placed_blocks[cell] = selected_block_id
+	placed_blocks[cell] = selected_block_id  # guarda el ID real del catálogo
 	emit_signal("block_placed", placed_blocks)
-	print("Bloque colocado en: ", cell)
+	print("Bloque colocado en: ", cell, " ID: ", selected_block_id)
 
 func _remove_block(cell: Vector3i):
 	if placed_blocks.has(cell):
@@ -95,8 +96,7 @@ func _on_block_catalog_block_selected(block_id: String):
 
 
 func _on_block_catalog_size_changed(size: String):
-	if size == "Large":
-		grid_map.cell_size = Vector3(2.5, 2.5, 2.5)
-	else:
-		grid_map.cell_size = Vector3(0.5, 0.5, 0.5)
-	print("Tamaño de celda cambiado a: ", size)
+	grid_map.clear()
+	placed_blocks.clear()
+	emit_signal("block_placed", placed_blocks)
+	print("Tamaño cambiado a: ", size)
