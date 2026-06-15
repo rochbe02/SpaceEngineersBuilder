@@ -1,0 +1,14 @@
+[gd_scene format=3 uid="uid://cmn4jie51v55l"]
+
+[ext_resource type="Script" uid="uid://db7rdd5ya7qmq" path="res://scripts/GridEditor.gd" id="1_h5hxw"]
+
+[node name="Node3D" type="Node3D" unique_id=490720900]
+script = ExtResource("1_h5hxw")
+
+[node name="GridMap" type="GridMap" parent="." unique_id=815244961]
+
+[node name="Camera3D" type="Camera3D" parent="." unique_id=557958802]
+transform = Transform3D(0.70710677, -0.4055798, 0.579228, 0, 0.81915206, 0.57357645, -0.70710677, -0.4055798, 0.579228, 10, 10, 10)
+
+[node name="DirectionalLight3D" type="DirectionalLight3D" parent="." unique_id=55509126]
+transform = Transform3D(0.70710677, -0.49999997, 0.49999997, 0, 0.70710677, 0.70710677, -0.70710677, -0.49999997, 0.49999997, 0, 0, 0)
