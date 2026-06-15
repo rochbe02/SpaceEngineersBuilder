@@ -1,9 +1,37 @@
 [gd_scene format=3 uid="uid://bxymxbcipuxd3"]
 
-[node name="Control" type="Control" unique_id=137198268]
-layout_mode = 3
-anchors_preset = 15
-anchor_right = 1.0
+[ext_resource type="Script" uid="uid://dgdehyg7pg880" path="res://scripts/BlockCatalog.gd" id="1_unyna"]
+
+[node name="PanelContainer" type="PanelContainer" unique_id=676122292]
+custom_minimum_size = Vector2(350, 600)
+anchors_preset = 9
 anchor_bottom = 1.0
-grow_horizontal = 2
+offset_right = 350.0
 grow_vertical = 2
+script = ExtResource("1_unyna")
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=1208043578]
+layout_mode = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="HBoxContainer" unique_id=277478898]
+custom_minimum_size = Vector2(150, 0)
+layout_mode = 2
+size_flags_horizontal = 3
+
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer" unique_id=1077694406]
+layout_mode = 2
+placeholder_text = "Buscar..."
+
+[node name="ItemList" type="ItemList" parent="HBoxContainer/VBoxContainer" unique_id=963378104]
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer" unique_id=817176150]
+layout_mode = 2
+size_flags_horizontal = 3
+horizontal_scroll_mode = 0
+
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/ScrollContainer" unique_id=1260531385]
+layout_mode = 2
+size_flags_horizontal = 3
+columns = 2

@@ -1,0 +1,105 @@
+{
+  "LargeHeavyBlockArmorBlock": {
+	"name": "Heavy Armor Block",
+	"category": "Armor",
+	"pcu": 1,
+	"materials": {
+	  "Iron": 140,
+	  "Nickel": 40,
+	  "Chrome": 10
+	}
+  },
+  "LargeBlockArmorBlock": {
+	"name": "Light Armor Block",
+	"category": "Armor",
+	"pcu": 1,
+	"materials": {
+	  "Iron": 25
+	}
+  },
+  "LargeBlockGyro": {
+	"name": "Gyroscope",
+	"category": "Gyroscopes",
+	"pcu": 50,
+	"materials": {
+	  "Iron": 600,
+	  "Nickel": 40,
+	  "Chrome": 4
+	}
+  },
+  "LargeBlockSmallThrust": {
+	"name": "Small Thruster",
+	"category": "Thrusters",
+	"pcu": 10,
+	"materials": {
+	  "Iron": 25,
+	  "Cobalt": 10,
+	  "Gold": 1,
+	  "Platinum": 1
+	}
+  },
+  "LargeBlockLargeThrust": {
+	"name": "Large Thruster",
+	"category": "Thrusters",
+	"pcu": 100,
+	"materials": {
+	  "Iron": 5000,
+	  "Cobalt": 240,
+	  "Gold": 40,
+	  "Platinum": 40
+	}
+  },
+  "LargeBlockBatteryBlock": {
+	"name": "Battery",
+	"category": "Electricity",
+	"pcu": 15,
+	"materials": {
+	  "Iron": 80,
+	  "Nickel": 30,
+	  "Silicon": 20
+	}
+  },
+  "LargeBlockSolarPanel": {
+	"name": "Solar Panel",
+	"category": "Electricity",
+	"pcu": 15,
+	"materials": {
+	  "Iron": 100,
+	  "Nickel": 20,
+	  "Silicon": 100,
+	  "Silver": 6
+	}
+  },
+  "LargeBlockCockpit": {
+	"name": "Cockpit",
+	"category": "Miscellaneous",
+	"pcu": 20,
+	"materials": {
+	  "Iron": 30,
+	  "Nickel": 20,
+	  "Chrome": 10,
+	  "Silicon": 8,
+	  "Gold": 2
+	}
+  },
+  "LargeBlockConveyorPipe": {
+	"name": "Conveyor Pipe",
+	"category": "Conveyors",
+	"pcu": 2,
+	"materials": {
+	  "Iron": 8,
+	  "Nickel": 4
+	}
+  },
+  "LargeBlockWeaponTurret": {
+	"name": "Interior Turret",
+	"category": "Weapons",
+	"pcu": 100,
+	"materials": {
+	  "Iron": 300,
+	  "Nickel": 30,
+	  "Chrome": 3,
+	  "Silicon": 2
+	}
+  }
+}
