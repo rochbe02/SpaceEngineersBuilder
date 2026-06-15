@@ -14,3 +14,4 @@ layer = 2
 offset_right = 400.0
 
 [connection signal="block_selected" from="CanvasLayer/BlockCatalog" to="Viewport3D" method="_on_block_catalog_block_selected"]
+[connection signal="size_changed" from="CanvasLayer/BlockCatalog" to="Viewport3D" method="_on_block_catalog_size_changed"]

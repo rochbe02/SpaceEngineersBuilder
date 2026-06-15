@@ -18,6 +18,19 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=714790895]
+layout_mode = 2
+
+[node name="BtnLarge" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1266344380]
+layout_mode = 2
+toggle_mode = true
+text = "Large"
+
+[node name="BtnSmall" type="Button" parent="HBoxContainer/VBoxContainer/HBoxContainer" unique_id=1562126032]
+layout_mode = 2
+toggle_mode = true
+text = "Small"
+
 [node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer" unique_id=1077694406]
 layout_mode = 2
 placeholder_text = "Buscar..."

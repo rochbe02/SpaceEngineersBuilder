@@ -92,3 +92,11 @@ func set_mode(placing: bool):
 func _on_block_catalog_block_selected(block_id: String):
 	selected_block_id = block_id
 	print("Bloque activo: ", block_id)
+
+
+func _on_block_catalog_size_changed(size: String):
+	if size == "Large":
+		grid_map.cell_size = Vector3(2.5, 2.5, 2.5)
+	else:
+		grid_map.cell_size = Vector3(0.5, 0.5, 0.5)
+	print("Tamaño de celda cambiado a: ", size)
