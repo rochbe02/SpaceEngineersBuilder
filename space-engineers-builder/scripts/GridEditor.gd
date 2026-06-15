@@ -87,3 +87,8 @@ func set_selected_block(block_id: String):
 
 func set_mode(placing: bool):
 	is_placing = placing
+
+
+func _on_block_catalog_block_selected(block_id: String):
+	selected_block_id = block_id
+	print("Bloque activo: ", block_id)
