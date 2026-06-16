@@ -25,7 +25,14 @@ func _ready():
 func _unhandled_input(event):
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
+			is_placing = true
 			_handle_click(event.position)
+		elif event.button_index == MOUSE_BUTTON_RIGHT and event.pressed:
+			var cell = _get_cell_at_mouse(event.position)
+			if cell != null and placed_blocks.has(cell):
+				is_placing = false
+				_handle_click(event.position)
+				get_viewport().set_input_as_handled()
 
 func _process(_delta):
 	var mouse_pos = get_viewport().get_mouse_position()

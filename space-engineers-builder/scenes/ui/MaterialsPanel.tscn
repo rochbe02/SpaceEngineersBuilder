@@ -22,6 +22,7 @@ layout_mode = 2
 
 [node name="ScrollContainer" type="ScrollContainer" parent="VBoxContainer" unique_id=1880920382]
 layout_mode = 2
+size_flags_vertical = 3
 
 [node name="MaterialsList" type="VBoxContainer" parent="VBoxContainer/ScrollContainer" unique_id=1057306744]
 layout_mode = 2

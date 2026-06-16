@@ -14,15 +14,12 @@ func _ready():
 
 func _input(event):
 	if event is InputEventMouseButton:
-		# Rotar con clic derecho
 		if event.button_index == MOUSE_BUTTON_RIGHT:
 			is_rotating = event.pressed
-		
-		# Pan con clic medio
+
 		if event.button_index == MOUSE_BUTTON_MIDDLE:
 			is_panning = event.pressed
 
-		# Zoom con rueda
 		if event.button_index == MOUSE_BUTTON_WHEEL_UP:
 			distance = max(3.0, distance - 1.0)
 			_update_position()
@@ -38,7 +35,6 @@ func _input(event):
 			_update_position()
 		
 		if is_panning:
-			# Mover el pivot en el plano de la cámara
 			var right = global_transform.basis.x
 			var up = global_transform.basis.y
 			pivot -= right * event.relative.x * 0.05
