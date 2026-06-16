@@ -54,14 +54,12 @@ func setup_cameras(placed_blocks: Dictionary, grid_map: GridMap):
 	cam_iso.look_at(center, Vector3.UP)
 	cam_iso.size = max_size
 
-func export_blueprint(path: String):
-	# Activar viewports temporalmente
+func export_blueprint(_path: String):
 	vp_top.render_target_update_mode = SubViewport.UPDATE_ONCE
 	vp_front.render_target_update_mode = SubViewport.UPDATE_ONCE
 	vp_side.render_target_update_mode = SubViewport.UPDATE_ONCE
 	vp_iso.render_target_update_mode = SubViewport.UPDATE_ONCE
 	
-	# Esperar varios frames para que rendericen
 	await get_tree().process_frame
 	await get_tree().process_frame
 	await get_tree().process_frame
@@ -72,7 +70,6 @@ func export_blueprint(path: String):
 	var img_side = vp_side.get_texture().get_image()
 	var img_iso = vp_iso.get_texture().get_image()
 	
-	# Convertir todas al mismo formato
 	img_top.convert(Image.FORMAT_RGBA8)
 	img_front.convert(Image.FORMAT_RGBA8)
 	img_side.convert(Image.FORMAT_RGBA8)
@@ -87,7 +84,10 @@ func export_blueprint(path: String):
 	final_img.blit_rect(img_side, Rect2i(0, 0, w, h), Vector2i(0, h))
 	final_img.blit_rect(img_iso, Rect2i(0, 0, w, h), Vector2i(w, h))
 	
+	# Guardar en carpeta Imágenes del sistema
+	var pictures_dir = OS.get_system_dir(OS.SYSTEM_DIR_PICTURES) + "/SpaceEngineersBuilder/"
+	DirAccess.make_dir_absolute(pictures_dir)
 	var time = Time.get_datetime_string_from_system().replace(":", "-")
-	var final_path = "user://plano_" + time + ".png"
+	var final_path = pictures_dir + "plano_" + time + ".png"
 	final_img.save_png(final_path)
 	print("Plano exportado en: ", final_path)

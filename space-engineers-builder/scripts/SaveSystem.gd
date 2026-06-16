@@ -1,6 +1,13 @@
 extends Node
 
+func get_save_dir() -> String:
+	var exe_dir = OS.get_executable_path().get_base_dir()
+	return exe_dir + "/saves/"
+
 func save_ship(ship_name: String, placed_blocks: Dictionary, ship_size: String) -> bool:
+	var save_dir = get_save_dir()
+	DirAccess.make_dir_absolute(save_dir)
+	
 	var data = {
 		"name": ship_name,
 		"size": ship_size,
@@ -25,8 +32,7 @@ func save_ship(ship_name: String, placed_blocks: Dictionary, ship_size: String) 
 			}
 		}
 	
-	var path = "user://ships/" + ship_name.replace(" ", "_") + ".json"
-	DirAccess.make_dir_absolute("user://ships")
+	var path = save_dir + ship_name.replace(" ", "_") + ".json"
 	var file = FileAccess.open(path, FileAccess.WRITE)
 	if file == null:
 		print("Error al guardar: ", path)
@@ -51,13 +57,13 @@ func load_ship(path: String) -> Dictionary:
 
 func get_saved_ships() -> Array:
 	var ships = []
-	var dir = DirAccess.open("user://ships")
+	var dir = DirAccess.open(get_save_dir())
 	if dir == null:
 		return ships
 	dir.list_dir_begin()
 	var file_name = dir.get_next()
 	while file_name != "":
 		if file_name.ends_with(".json"):
-			ships.append("user://ships/" + file_name)
+			ships.append(get_save_dir() + file_name)
 		file_name = dir.get_next()
 	return ships
