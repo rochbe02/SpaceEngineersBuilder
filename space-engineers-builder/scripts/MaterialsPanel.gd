@@ -14,9 +14,15 @@ func update_stats(placed_blocks: Dictionary):
 	var total_pcu = 0
 	
 	for cell in placed_blocks:
-		var block_id = placed_blocks[cell]
+		var block_data = placed_blocks[cell]
+		# Soporta tanto formato viejo (String) como nuevo (Dictionary)
+		var block_id = ""
+		if block_data is String:
+			block_id = block_data
+		elif block_data is Dictionary:
+			block_id = block_data.get("id", "")
+		
 		var block = BlockDatabase.get_block(block_id)
-		print("Block ID: ", block_id, " Block data: ", block)  # <- temporal
 		if block.is_empty():
 			continue
 		

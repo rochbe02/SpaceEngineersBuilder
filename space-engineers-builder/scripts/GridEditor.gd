@@ -7,10 +7,9 @@ extends Node3D
 var selected_block_id: String = "MeshInstance3D"
 var placed_blocks: Dictionary = {}
 var is_placing: bool = true
+var current_rotation: Vector3i = Vector3i(0, 0, 0)
 
-# Material preview colocar
 var mat_place: StandardMaterial3D
-# Material preview borrar
 var mat_erase: StandardMaterial3D
 
 signal block_placed(placed_blocks: Dictionary)
@@ -34,20 +33,46 @@ func _ready():
 	block_preview.visible = false
 
 func _unhandled_input(event):
-	# Toggle modo borrar con X
-	if event is InputEventKey:
-		if event.keycode == KEY_X and event.pressed and not event.echo:
-			is_placing = !is_placing
-			if is_placing:
-				block_preview.material_override = mat_place
-				print("Modo: Colocar")
-			else:
-				block_preview.material_override = mat_erase
-				print("Modo: Borrar")
+	if event is InputEventKey and event.pressed and not event.echo:
+		match event.keycode:
+			KEY_X:
+				is_placing = !is_placing
+				if is_placing:
+					block_preview.material_override = mat_place
+					print("Modo: Colocar")
+				else:
+					block_preview.material_override = mat_erase
+					print("Modo: Borrar")
+			KEY_Q:
+				current_rotation.y = (current_rotation.y + 90) % 360
+				_update_preview_rotation()
+			KEY_E:
+				current_rotation.y = (current_rotation.y - 90 + 360) % 360
+				_update_preview_rotation()
+			KEY_HOME:
+				current_rotation.x = (current_rotation.x + 90) % 360
+				_update_preview_rotation()
+			KEY_END:
+				current_rotation.x = (current_rotation.x - 90 + 360) % 360
+				_update_preview_rotation()
+			KEY_PAGEUP:
+				current_rotation.z = (current_rotation.z + 90) % 360
+				_update_preview_rotation()
+			KEY_PAGEDOWN:
+				current_rotation.z = (current_rotation.z - 90 + 360) % 360
+				_update_preview_rotation()
 	
 	if event is InputEventMouseButton:
 		if event.button_index == MOUSE_BUTTON_LEFT and event.pressed:
 			_handle_click(event.position)
+
+func _update_preview_rotation():
+	block_preview.rotation_degrees = Vector3(
+		current_rotation.x,
+		current_rotation.y,
+		current_rotation.z
+	)
+	print("Rotación: ", current_rotation)
 
 func _process(delta):
 	var mouse_pos = get_viewport().get_mouse_position()
@@ -55,7 +80,6 @@ func _process(delta):
 	if is_placing:
 		var cell = _get_cell_at_mouse(mouse_pos)
 		if cell != null:
-			# No mostrar preview si ya hay un bloque en esa celda
 			if placed_blocks.has(cell):
 				block_preview.visible = false
 				return
@@ -67,7 +91,6 @@ func _process(delta):
 	else:
 		var cell = _get_cell_under_mouse(mouse_pos)
 		if cell != null and placed_blocks.has(cell):
-			# Preview fijo sin lerp en modo borrar para evitar parpadeo
 			block_preview.visible = true
 			block_preview.position = grid_map.map_to_local(cell)
 		else:
@@ -107,11 +130,10 @@ func _get_cell_under_mouse(mouse_pos: Vector2):
 	var result = space.intersect_ray(query)
 	
 	if result and result.size() > 0:
-		# Sin offset — apunta al centro del bloque detectado
 		var hit_pos = result.position - result.normal * 0.1
 		return grid_map.local_to_map(hit_pos)
 	return null
-	
+
 func _handle_click(mouse_pos: Vector2):
 	if is_placing:
 		var cell = _get_cell_at_mouse(mouse_pos)
@@ -124,10 +146,21 @@ func _handle_click(mouse_pos: Vector2):
 
 func _place_block(cell: Vector3i):
 	var item = grid_map.mesh_library.find_item_by_name("MeshInstance3D")
-	grid_map.set_cell_item(cell, item)
-	placed_blocks[cell] = selected_block_id
+	var basis = _rotation_to_basis()
+	grid_map.set_cell_item(cell, item, basis)
+	placed_blocks[cell] = {
+		"id": selected_block_id,
+		"rotation": current_rotation
+	}
 	emit_signal("block_placed", placed_blocks)
 	print("Bloque colocado en: ", cell, " ID: ", selected_block_id)
+
+func _rotation_to_basis() -> int:
+	match current_rotation.y:
+		90: return 22
+		180: return 10
+		270: return 14
+	return 0
 
 func _remove_block(cell: Vector3i):
 	if placed_blocks.has(cell):
