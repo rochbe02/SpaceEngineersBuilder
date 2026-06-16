@@ -18,6 +18,7 @@ config/icon="res://icon.svg"
 [autoload]
 
 BlockDatabase="*uid://djtjusagnkrj4"
+SaveSystem="*uid://dlwo6a3vj7te4"
 
 [physics]
 

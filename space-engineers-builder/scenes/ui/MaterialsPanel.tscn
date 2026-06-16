@@ -41,6 +41,24 @@ text = "PCU Total:"
 layout_mode = 2
 text = "0"
 
+[node name="HSeparator3" type="HSeparator" parent="VBoxContainer" unique_id=1220492751]
+layout_mode = 2
+
+[node name="LineEdit (ShipName)" type="LineEdit" parent="VBoxContainer" unique_id=1016959239]
+layout_mode = 2
+placeholder_text = "Nombre de la nave"
+
+[node name="Button (BtnGuardar)" type="Button" parent="VBoxContainer" unique_id=1839468889]
+layout_mode = 2
+text = "Guardar Nave"
+
+[node name="Button (BtnCargar)" type="Button" parent="VBoxContainer" unique_id=417276427]
+layout_mode = 2
+text = "Cargar Nave"
+
+[node name="HSeparator4" type="HSeparator" parent="VBoxContainer" unique_id=1273266783]
+layout_mode = 2
+
 [node name="BtnExportar" type="Button" parent="VBoxContainer" unique_id=476270254]
 layout_mode = 2
 text = "Exportar Plano"

@@ -25,8 +25,16 @@ grow_horizontal = 0
 
 [node name="BlueprintExport" parent="." unique_id=179724670 instance=ExtResource("4_rarhs")]
 
+[node name="LoadDialog" type="FileDialog" parent="." unique_id=696106124]
+title = "Open a File"
+file_mode = 0
+access = 1
+filters = PackedStringArray("*.json")
+
 [connection signal="block_placed" from="Viewport3D" to="CanvasLayer/MaterialsPanel" method="_on_viewport_3d_block_placed"]
 [connection signal="block_removed" from="Viewport3D" to="CanvasLayer/MaterialsPanel" method="_on_viewport_3d_block_removed"]
 [connection signal="block_selected" from="CanvasLayer/BlockCatalog" to="Viewport3D" method="_on_block_catalog_block_selected"]
 [connection signal="size_changed" from="CanvasLayer/BlockCatalog" to="Viewport3D" method="_on_block_catalog_size_changed"]
+[connection signal="cargar_nave" from="CanvasLayer/MaterialsPanel" to="." method="_on_materials_panel_cargar_nave"]
 [connection signal="exportar_plano" from="CanvasLayer/MaterialsPanel" to="." method="_on_materials_panel_exportar_plano"]
+[connection signal="guardar_nave" from="CanvasLayer/MaterialsPanel" to="." method="_on_materials_panel_guardar_nave"]
