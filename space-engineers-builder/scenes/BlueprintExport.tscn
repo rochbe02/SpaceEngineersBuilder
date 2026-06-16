@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://dr6gr06rf6dox"]
+
+[ext_resource type="Script" uid="uid://bixiaguoxowuc" path="res://scripts/BlueprintExporter.gd" id="1_ycyfl"]
+
+[node name="BlueprintExport" type="Node" unique_id=179724670]
+script = ExtResource("1_ycyfl")
+
+[node name="SubViewportContainer(Top)" type="SubViewportContainer" parent="." unique_id=1544350868]
+visible = false
+offset_right = 512.0
+offset_bottom = 512.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer(Top)" unique_id=631588204]
+handle_input_locally = false
+render_target_update_mode = 0
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer(Top)/SubViewport" unique_id=1127707165]
+transform = Transform3D(20, 0, 0, 0, -8.742278e-07, 20, 0, -20, -8.742278e-07, 0, 50, 0)
+projection = 1
+
+[node name="SubViewportContainer(Front)" type="SubViewportContainer" parent="." unique_id=96241276]
+visible = false
+offset_right = 512.0
+offset_bottom = 512.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer(Front)" unique_id=661786739]
+handle_input_locally = false
+render_target_update_mode = 0
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer(Front)/SubViewport" unique_id=1087509392]
+transform = Transform3D(20, 0, 0, 0, 20, 0, 0, 0, 20, 0, 0, 50)
+projection = 1
+
+[node name="SubViewportContainer(Side)" type="SubViewportContainer" parent="." unique_id=299848890]
+visible = false
+offset_right = 512.0
+offset_bottom = 512.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer(Side)" unique_id=1825226566]
+handle_input_locally = false
+render_target_update_mode = 0
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer(Side)/SubViewport" unique_id=493328500]
+transform = Transform3D(-8.742278e-07, 0, -20, 0, 20, 0, 20, 0, -8.742278e-07, 50, 0, 0)
+projection = 1
+
+[node name="SubViewportContainer(Iso)" type="SubViewportContainer" parent="." unique_id=1206857105]
+visible = false
+offset_right = 512.0
+offset_bottom = 512.0
+
+[node name="SubViewport" type="SubViewport" parent="SubViewportContainer(Iso)" unique_id=1918458191]
+handle_input_locally = false
+render_target_update_mode = 0
+
+[node name="Camera3D" type="Camera3D" parent="SubViewportContainer(Iso)/SubViewport" unique_id=402096722]
+transform = Transform3D(14.142136, -8.111596, 11.584559, 0, 16.383041, 11.471529, -14.142136, -8.111596, 11.584559, 30, 30, 30)
+projection = 1

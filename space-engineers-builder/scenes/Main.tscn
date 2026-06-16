@@ -1,10 +1,13 @@
 [gd_scene format=3 uid="uid://y0tim6d7nycm"]
 
 [ext_resource type="PackedScene" uid="uid://cmn4jie51v55l" path="res://scenes/Viewport3D.tscn" id="1_elqb8"]
+[ext_resource type="Script" uid="uid://ub4r3gqvx8ft" path="res://scripts/Main.gd" id="1_vcsgt"]
 [ext_resource type="PackedScene" uid="uid://bxymxbcipuxd3" path="res://scenes/ui/BlockCatalog.tscn" id="2_rvslj"]
 [ext_resource type="PackedScene" uid="uid://ckyit8i24xfxs" path="res://scenes/ui/MaterialsPanel.tscn" id="3_0bbpv"]
+[ext_resource type="PackedScene" uid="uid://dr6gr06rf6dox" path="res://scenes/BlueprintExport.tscn" id="4_rarhs"]
 
 [node name="Node" type="Node" unique_id=844077303]
+script = ExtResource("1_vcsgt")
 
 [node name="Viewport3D" parent="." unique_id=490720900 instance=ExtResource("1_elqb8")]
 
@@ -20,7 +23,10 @@ anchor_left = 1.0
 offset_left = -94.0
 grow_horizontal = 0
 
+[node name="BlueprintExport" parent="." unique_id=179724670 instance=ExtResource("4_rarhs")]
+
 [connection signal="block_placed" from="Viewport3D" to="CanvasLayer/MaterialsPanel" method="_on_viewport_3d_block_placed"]
 [connection signal="block_removed" from="Viewport3D" to="CanvasLayer/MaterialsPanel" method="_on_viewport_3d_block_removed"]
 [connection signal="block_selected" from="CanvasLayer/BlockCatalog" to="Viewport3D" method="_on_block_catalog_block_selected"]
 [connection signal="size_changed" from="CanvasLayer/BlockCatalog" to="Viewport3D" method="_on_block_catalog_size_changed"]
+[connection signal="exportar_plano" from="CanvasLayer/MaterialsPanel" to="." method="_on_materials_panel_exportar_plano"]

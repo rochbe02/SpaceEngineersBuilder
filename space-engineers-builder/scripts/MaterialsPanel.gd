@@ -1,10 +1,16 @@
 extends PanelContainer
+signal exportar_plano
 
 @onready var materials_list: VBoxContainer = $VBoxContainer/ScrollContainer/MaterialsList
 @onready var pcu_value: Label = $VBoxContainer/HBoxContainer/PCUValue
+@onready var btn_exportar: Button = $VBoxContainer/BtnExportar
 
 func _ready():
 	print("MaterialsPanel listo")
+	btn_exportar.pressed.connect(_on_exportar_pressed)
+
+func _on_exportar_pressed():
+	emit_signal("exportar_plano")
 
 func update_stats(placed_blocks: Dictionary):
 	for child in materials_list.get_children():

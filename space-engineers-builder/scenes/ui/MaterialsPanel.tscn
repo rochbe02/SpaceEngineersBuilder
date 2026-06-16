@@ -40,3 +40,7 @@ text = "PCU Total:"
 [node name="PCUValue" type="Label" parent="VBoxContainer/HBoxContainer" unique_id=1763118862]
 layout_mode = 2
 text = "0"
+
+[node name="BtnExportar" type="Button" parent="VBoxContainer" unique_id=476270254]
+layout_mode = 2
+text = "Exportar Plano"
