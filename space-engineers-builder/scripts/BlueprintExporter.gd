@@ -77,14 +77,43 @@ func export_blueprint(_path: String):
 	
 	var w = img_top.get_width()
 	var h = img_top.get_height()
-	var final_img = Image.create(w * 2, h * 2, false, Image.FORMAT_RGBA8)
+	var padding = 40
+	var label_height = 30
+	var final_w = w * 2 + padding * 3
+	var final_h = h * 2 + padding * 3 + label_height * 2
 	
-	final_img.blit_rect(img_top, Rect2i(0, 0, w, h), Vector2i(0, 0))
-	final_img.blit_rect(img_front, Rect2i(0, 0, w, h), Vector2i(w, 0))
-	final_img.blit_rect(img_side, Rect2i(0, 0, w, h), Vector2i(0, h))
-	final_img.blit_rect(img_iso, Rect2i(0, 0, w, h), Vector2i(w, h))
+	var final_img = Image.create(final_w, final_h, false, Image.FORMAT_RGBA8)
 	
-	# Guardar en carpeta Imágenes del sistema
+	# Fondo azul blueprint
+	final_img.fill(Color(0.05, 0.1, 0.25, 1.0))
+	
+	# Posiciones de cada vista
+	var positions = [
+		Vector2i(padding, padding + label_height),                          # TOP
+		Vector2i(w + padding * 2, padding + label_height),                  # FRONT
+		Vector2i(padding, h + padding * 2 + label_height * 2),             # SIDE
+		Vector2i(w + padding * 2, h + padding * 2 + label_height * 2)      # ISO
+	]
+	
+	var images = [img_top, img_front, img_side, img_iso]
+	
+	for i in range(4):
+		final_img.blit_rect(images[i], Rect2i(0, 0, w, h), positions[i])
+	
+	# Líneas divisorias blancas
+	var line_color = Color(0.4, 0.7, 1.0, 0.8)
+	
+	# Línea vertical central
+	for y in range(final_h):
+		for x in range(2):
+			final_img.set_pixel(w + padding + padding/2 + x, y, line_color)
+	
+	# Línea horizontal central
+	for x in range(final_w):
+		for y in range(2):
+			final_img.set_pixel(x, h + padding + label_height + padding/2 + y, line_color)
+	
+	# Guardar
 	var pictures_dir = OS.get_system_dir(OS.SYSTEM_DIR_PICTURES) + "/SpaceEngineersBuilder/"
 	DirAccess.make_dir_absolute(pictures_dir)
 	var time = Time.get_datetime_string_from_system().replace(":", "-")
