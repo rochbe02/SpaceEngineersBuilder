@@ -147,13 +147,70 @@ func _handle_click(mouse_pos: Vector2):
 func _place_block(cell: Vector3i):
 	var item = grid_map.mesh_library.find_item_by_name("MeshInstance3D")
 	var basis = _rotation_to_basis()
+	var block_data = BlockDatabase.get_block(selected_block_id)
+	var block_size = block_data.get("block_size", {"x": 1, "y": 1, "z": 1})
+	
+	# Calcular todas las celdas que ocupa el bloque según rotación
+	var cells = _get_occupied_cells(cell, block_size, current_rotation)
+	
+	# Verificar que ninguna celda esté ocupada
+	for c in cells:
+		if placed_blocks.has(c):
+			print("Celda ocupada: ", c)
+			return
+	
+	# Colocar el bloque visual solo en la celda principal
 	grid_map.set_cell_item(cell, item, basis)
-	placed_blocks[cell] = {
-		"id": selected_block_id,
-		"rotation": current_rotation
-	}
+	
+	# Registrar todas las celdas como ocupadas
+	for c in cells:
+		placed_blocks[c] = {
+			"id": selected_block_id,
+			"rotation": current_rotation,
+			"origin": cell  # celda principal del bloque
+		}
+	
 	emit_signal("block_placed", placed_blocks)
-	print("Bloque colocado en: ", cell, " ID: ", selected_block_id)
+	print("Bloque colocado en: ", cell, " celdas: ", cells.size())
+
+func _remove_block(cell: Vector3i):
+	if not placed_blocks.has(cell):
+		return
+	
+	# Encontrar la celda origen del bloque
+	var origin = placed_blocks[cell].get("origin", cell)
+	var block_id = placed_blocks[cell].get("id", "")
+	var rotation = placed_blocks[cell].get("rotation", Vector3i(0, 0, 0))
+	var block_data = BlockDatabase.get_block(block_id)
+	var block_size = block_data.get("block_size", {"x": 1, "y": 1, "z": 1})
+	
+	# Borrar todas las celdas que ocupa
+	var cells = _get_occupied_cells(origin, block_size, rotation)
+	for c in cells:
+		placed_blocks.erase(c)
+		grid_map.set_cell_item(c, GridMap.INVALID_CELL_ITEM)
+	
+	emit_signal("block_removed", placed_blocks)
+	print("Bloque eliminado en: ", origin)
+
+func _get_occupied_cells(origin: Vector3i, block_size: Dictionary, rotation: Vector3i) -> Array:
+	var cells = []
+	var sx = block_size.get("x", 1)
+	var sy = block_size.get("y", 1)
+	var sz = block_size.get("z", 1)
+	
+	# Intercambiar dimensiones según rotación en Y
+	if rotation.y == 90 or rotation.y == 270:
+		var temp = sx
+		sx = sz
+		sz = temp
+	
+	for x in range(sx):
+		for y in range(sy):
+			for z in range(sz):
+				cells.append(origin + Vector3i(x, y, z))
+	
+	return cells
 
 func _rotation_to_basis() -> int:
 	match current_rotation.y:
@@ -161,13 +218,6 @@ func _rotation_to_basis() -> int:
 		180: return 10
 		270: return 14
 	return 0
-
-func _remove_block(cell: Vector3i):
-	if placed_blocks.has(cell):
-		placed_blocks.erase(cell)
-		grid_map.set_cell_item(cell, GridMap.INVALID_CELL_ITEM)
-		emit_signal("block_removed", placed_blocks)
-		print("Bloque eliminado en: ", cell)
 
 func set_selected_block(block_id: String):
 	selected_block_id = block_id
