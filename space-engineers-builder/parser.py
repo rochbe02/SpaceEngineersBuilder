@@ -118,6 +118,13 @@ def parse_sbc_file(filepath, localization):
             display_name_key = definition.findtext("DisplayName", subtype_id)
             display_name = localization.get(display_name_key, display_name_key)
 
+            # Ícono
+            icon_path = definition.findtext("Icon", "")
+            icon_name = ""
+            if icon_path:
+                icon_name = os.path.splitext(os.path.basename(icon_path))[0] + ".png"
+
+
             cube_size = definition.findtext("CubeSize", "Large")
 
             size_elem = definition.find("Size")
@@ -149,7 +156,8 @@ def parse_sbc_file(filepath, localization):
                 "size": cube_size,
                 "block_size": block_size,
                 "pcu": pcu,
-                "components": components
+                "components": components,
+                "icon": icon_name  # ← nuevo
             }
 
         except Exception as e:
