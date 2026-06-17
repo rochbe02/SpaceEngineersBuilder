@@ -1,6 +1,7 @@
 [gd_scene format=3 uid="uid://dr6gr06rf6dox"]
 
 [ext_resource type="Script" uid="uid://bixiaguoxowuc" path="res://scripts/BlueprintExporter.gd" id="1_ycyfl"]
+[ext_resource type="FontFile" uid="uid://cfmmj5cfotpcu" path="res://assets/fonts/04B_20__.TTF" id="2_p5cfv"]
 
 [node name="BlueprintExport" type="Node" unique_id=179724670]
 script = ExtResource("1_ycyfl")
@@ -56,3 +57,64 @@ render_target_update_mode = 0
 [node name="Camera3D" type="Camera3D" parent="SubViewportContainer(Iso)/SubViewport" unique_id=402096722]
 transform = Transform3D(14.142136, -8.111596, 11.584559, 0, 16.383041, 11.471529, -14.142136, -8.111596, 11.584559, 30, 30, 30)
 projection = 1
+
+[node name="LabelViewport" type="SubViewportContainer" parent="." unique_id=1425636381]
+visible = false
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="SubViewport" type="SubViewport" parent="LabelViewport" unique_id=2034440999]
+transparent_bg = true
+handle_input_locally = false
+size = Vector2i(1144, 1204)
+render_target_update_mode = 0
+
+[node name="Control" type="Control" parent="LabelViewport/SubViewport" unique_id=1917210871]
+layout_mode = 3
+anchors_preset = 0
+offset_right = 40.0
+offset_bottom = 40.0
+
+[node name="LabelTop" type="Label" parent="LabelViewport/SubViewport/Control" unique_id=1424182669]
+modulate = Color(0.9063318, 1.1587777, 1.353256, 1)
+layout_mode = 0
+offset_left = 40.0
+offset_top = 50.0
+offset_right = 139.0
+offset_bottom = 74.0
+theme_override_fonts/font = ExtResource("2_p5cfv")
+theme_override_font_sizes/font_size = 24
+text = "TOP"
+
+[node name="LabelFront" type="Label" parent="LabelViewport/SubViewport/Control" unique_id=292492748]
+modulate = Color(0.9063318, 1.1587777, 1.353256, 1)
+layout_mode = 0
+offset_left = 592.0
+offset_top = 50.0
+offset_right = 757.0
+offset_bottom = 74.0
+theme_override_fonts/font = ExtResource("2_p5cfv")
+theme_override_font_sizes/font_size = 24
+text = "FRONT"
+
+[node name="LabelSide" type="Label" parent="LabelViewport/SubViewport/Control" unique_id=432593295]
+modulate = Color(0.9083316, 1.1587777, 1.353256, 1)
+layout_mode = 0
+offset_left = 40.0
+offset_top = 620.0
+offset_right = 148.0
+offset_bottom = 644.0
+theme_override_fonts/font = ExtResource("2_p5cfv")
+theme_override_font_sizes/font_size = 24
+text = "SIDE"
+
+[node name="LabelIso" type="Label" parent="LabelViewport/SubViewport/Control" unique_id=1996762759]
+modulate = Color(0.9063318, 1.1587777, 1.353256, 1)
+layout_mode = 0
+offset_left = 592.0
+offset_top = 620.0
+offset_right = 667.0
+offset_bottom = 644.0
+theme_override_fonts/font = ExtResource("2_p5cfv")
+theme_override_font_sizes/font_size = 24
+text = "ISO"
