@@ -15,7 +15,7 @@ layout_mode = 2
 
 [node name="Title" type="Label" parent="VBoxContainer" unique_id=568664939]
 layout_mode = 2
-text = "Materiales"
+text = "Componentes"
 
 [node name="HSeparator" type="HSeparator" parent="VBoxContainer" unique_id=1347476832]
 layout_mode = 2

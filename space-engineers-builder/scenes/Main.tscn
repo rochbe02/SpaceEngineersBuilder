@@ -15,12 +15,14 @@ script = ExtResource("1_vcsgt")
 layer = 2
 
 [node name="BlockCatalog" parent="CanvasLayer" unique_id=137198268 instance=ExtResource("2_rvslj")]
-offset_right = 400.0
+custom_minimum_size = Vector2(200, 0)
+offset_right = 154.0
 
 [node name="MaterialsPanel" parent="CanvasLayer" unique_id=2135652470 instance=ExtResource("3_0bbpv")]
+custom_minimum_size = Vector2(200, 0)
 anchors_preset = 11
 anchor_left = 1.0
-offset_left = -94.0
+offset_left = -123.0
 grow_horizontal = 0
 
 [node name="BlueprintExport" parent="." unique_id=179724670 instance=ExtResource("4_rarhs")]

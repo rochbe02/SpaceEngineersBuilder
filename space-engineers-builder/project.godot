@@ -20,6 +20,10 @@ config/icon="res://icon.svg"
 BlockDatabase="*uid://djtjusagnkrj4"
 SaveSystem="*uid://dlwo6a3vj7te4"
 
+[display]
+
+window/size/mode=2
+
 [physics]
 
 3d/physics_engine="Jolt Physics"

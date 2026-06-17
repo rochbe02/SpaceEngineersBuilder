@@ -18,6 +18,10 @@ custom_minimum_size = Vector2(150, 0)
 layout_mode = 2
 size_flags_horizontal = 3
 
+[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer" unique_id=1077694406]
+layout_mode = 2
+placeholder_text = "Buscar..."
+
 [node name="HBoxContainer" type="HBoxContainer" parent="HBoxContainer/VBoxContainer" unique_id=714790895]
 layout_mode = 2
 
@@ -31,20 +35,22 @@ layout_mode = 2
 toggle_mode = true
 text = "Small"
 
-[node name="LineEdit" type="LineEdit" parent="HBoxContainer/VBoxContainer" unique_id=1077694406]
-layout_mode = 2
-placeholder_text = "Buscar..."
-
 [node name="ItemList" type="ItemList" parent="HBoxContainer/VBoxContainer" unique_id=963378104]
 layout_mode = 2
 size_flags_vertical = 3
 
-[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer" unique_id=817176150]
+[node name="BlockPanel" type="PanelContainer" parent="HBoxContainer/VBoxContainer" unique_id=2018725875]
+visible = false
+custom_minimum_size = Vector2(200, 0)
+layout_mode = 2
+size_flags_vertical = 3
+
+[node name="ScrollContainer" type="ScrollContainer" parent="HBoxContainer/VBoxContainer/BlockPanel" unique_id=817176150]
 layout_mode = 2
 size_flags_horizontal = 3
 horizontal_scroll_mode = 0
 
-[node name="GridContainer" type="GridContainer" parent="HBoxContainer/ScrollContainer" unique_id=1260531385]
+[node name="GridContainer" type="GridContainer" parent="HBoxContainer/VBoxContainer/BlockPanel/ScrollContainer" unique_id=1260531385]
 layout_mode = 2
 size_flags_horizontal = 3
 columns = 2

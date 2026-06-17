@@ -53,17 +53,17 @@ func update_stats(placed_blocks: Dictionary):
 		if block.is_empty():
 			continue
 		
-		for material in block.get("materials", {}):
-			totals[material] = totals.get(material, 0) + block["materials"][material]
+		for component in block.get("components", {}):
+			totals[component] = totals.get(component, 0) + block["components"][component]
 		total_pcu += block.get("pcu", 0)
 	
-	for material in totals:
+	for component in totals:
 		var row = HBoxContainer.new()
 		var name_label = Label.new()
-		name_label.text = material + ":"
+		name_label.text = component + ":"
 		name_label.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		var amount_label = Label.new()
-		amount_label.text = str(totals[material])
+		amount_label.text = str(totals[component])
 		row.add_child(name_label)
 		row.add_child(amount_label)
 		materials_list.add_child(row)

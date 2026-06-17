@@ -3,17 +3,21 @@ extends Node
 var blocks: Dictionary = {}
 var categories: Array = [
 	"Armor",
-	"Conveyors",
-	"Electricity",
+	"Thrusters",
 	"Gyroscopes",
 	"Landing",
 	"Lights",
-	"Miscellaneous",
+	"Electricity",
+	"Conveyors",
 	"Production",
-	"Structural",
-	"Thrusters",
+	"Control",
+	"Weapons",
 	"Tools",
-	"Weapons"
+	"Communications",
+	"Mechanical",
+	"Storage",
+	"Structural",
+	"Miscellaneous"
 ]
 
 func _ready():
