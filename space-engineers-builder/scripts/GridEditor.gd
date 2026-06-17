@@ -362,7 +362,7 @@ func set_tool(tool_name: String):
 
 func set_hollow(hollow: bool):
 	is_hollow = hollow
-	print("Hueco: ", hollow)
+	print("Hueco actualizado a: ", hollow)
 	
 var line_preview_meshes: Array = []
 

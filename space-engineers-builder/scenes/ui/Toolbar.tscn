@@ -58,6 +58,7 @@ layout_mode = 2
 
 [node name="BtnHueco" type="Button" parent="HBoxContainer" unique_id=1643812151]
 layout_mode = 2
+toggle_mode = true
 text = "Hueco"
 
 [node name="VSeparator3" type="VSeparator" parent="HBoxContainer" unique_id=1295677779]

@@ -60,5 +60,5 @@ func _set_herramienta(herramienta: String):
 	print("Herramienta: ", herramienta)
 
 func _on_hueco_toggled(pressed: bool):
+	print("Botón hueco presionado: ", pressed)
 	emit_signal("hueco_cambiado", pressed)
-	print("Hueco: ", pressed)
