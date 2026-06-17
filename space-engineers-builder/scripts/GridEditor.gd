@@ -102,6 +102,26 @@ func _process(delta):
 		_update_line_preview(mouse_pos)
 	elif current_tool == "plano":
 		_update_plano_preview(mouse_pos)
+	elif current_tool == "cubo":
+		_update_cubo_preview(mouse_pos)
+
+func _update_cubo_preview(mouse_pos: Vector2):
+	if tool_start_cell == null:
+		var cell = _get_cell_at_mouse(mouse_pos)
+		if cell != null:
+			block_preview.visible = true
+			block_preview.position = grid_map.map_to_local(cell)
+		else:
+			block_preview.visible = false
+	elif tool_second_cell == null:
+		var cell = _get_cell_at_mouse(mouse_pos)
+		if cell != null:
+			var cells = _get_plano_cells(tool_start_cell, cell)
+			_show_multi_preview(cells)
+	else:
+		var height = _get_height_from_mouse(mouse_pos)
+		var cells = _get_cubo_cells_3click(tool_start_cell, tool_second_cell, height)
+		_show_multi_preview(cells)
 
 func _update_plano_preview(mouse_pos: Vector2):
 	if tool_start_cell == null:
