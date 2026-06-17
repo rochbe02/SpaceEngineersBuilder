@@ -99,6 +99,23 @@ func _process(delta):
 				block_preview.visible = false
 	elif current_tool == "linea":
 		_update_line_preview(mouse_pos)
+	elif current_tool == "plano":
+		_update_plano_preview(mouse_pos)
+
+func _update_plano_preview(mouse_pos: Vector2):
+	if tool_start_cell == null:
+		var cell = _get_cell_at_mouse(mouse_pos)
+		if cell != null:
+			block_preview.visible = true
+			block_preview.position = grid_map.map_to_local(cell)
+		else:
+			block_preview.visible = false
+	else:
+		var cell = _get_cell_at_mouse(mouse_pos)
+		if cell != null:
+			var cells = _get_plano_cells(tool_start_cell, cell)
+			_show_multi_preview(cells)
+
 
 func _update_line_preview(mouse_pos: Vector2):
 	if tool_start_cell == null:
@@ -165,6 +182,46 @@ func _handle_click(mouse_pos: Vector2):
 				_remove_block(cell)
 	elif current_tool == "linea":
 		_handle_line_tool(mouse_pos)
+	elif current_tool == "plano":
+		_handle_plano_tool(mouse_pos)
+
+func _handle_plano_tool(mouse_pos: Vector2):
+	var cell = _get_cell_at_mouse(mouse_pos)
+	if cell == null:
+		return
+	
+	if tool_start_cell == null:
+		tool_start_cell = cell
+		print("Plano: esquina inicial ", cell)
+	else:
+		var plano_cells = _get_plano_cells(tool_start_cell, cell)
+		for c in plano_cells:
+			if is_placing:
+				_place_block(c)
+			else:
+				_remove_block(c)
+		tool_start_cell = null
+		_hide_line_preview()
+		print("Plano completado: ", plano_cells.size(), " bloques")
+
+func _get_plano_cells(start: Vector3i, end: Vector3i) -> Array:
+	var cells = []
+	var min_x = min(start.x, end.x)
+	var max_x = max(start.x, end.x)
+	var min_z = min(start.z, end.z)
+	var max_z = max(start.z, end.z)
+	var y = start.y
+	
+	for x in range(min_x, max_x + 1):
+		for z in range(min_z, max_z + 1):
+			if is_hollow:
+				# Solo el borde
+				if x == min_x or x == max_x or z == min_z or z == max_z:
+					cells.append(Vector3i(x, y, z))
+			else:
+				cells.append(Vector3i(x, y, z))
+	
+	return cells
 
 func _handle_line_tool(mouse_pos: Vector2):
 	var cell = _get_cell_at_mouse(mouse_pos)
@@ -309,10 +366,7 @@ func set_hollow(hollow: bool):
 	
 var line_preview_meshes: Array = []
 
-func _show_line_preview(start: Vector3i, end: Vector3i):
-	var cells = _get_line_cells(start, end)
-	
-	# Crear más meshes de preview si faltan
+func _show_multi_preview(cells: Array):
 	while line_preview_meshes.size() < cells.size():
 		var mesh_instance = MeshInstance3D.new()
 		var box = BoxMesh.new()
@@ -322,7 +376,6 @@ func _show_line_preview(start: Vector3i, end: Vector3i):
 		add_child(mesh_instance)
 		line_preview_meshes.append(mesh_instance)
 	
-	# Posicionar y mostrar los necesarios
 	for i in range(line_preview_meshes.size()):
 		if i < cells.size():
 			line_preview_meshes[i].visible = true
@@ -331,6 +384,10 @@ func _show_line_preview(start: Vector3i, end: Vector3i):
 			line_preview_meshes[i].visible = false
 	
 	block_preview.visible = false
+
+func _show_line_preview(start: Vector3i, end: Vector3i):
+	var cells = _get_line_cells(start, end)
+	_show_multi_preview(cells)
 
 func _hide_line_preview():
 	for mesh in line_preview_meshes:
