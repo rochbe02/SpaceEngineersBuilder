@@ -50,11 +50,26 @@ func _show_category(category: String):
 func _populate_grid(blocks: Dictionary):
 	for child in block_grid.get_children():
 		child.queue_free()
+	
 	for block_id in blocks:
 		var block = blocks[block_id]
 		var btn = Button.new()
-		btn.text = block.get("name", block_id)
 		btn.custom_minimum_size = Vector2(80, 80)
+		btn.tooltip_text = block.get("name", block_id)
+		
+		# Cargar ícono si existe
+		var icon_name = block.get("icon", "")
+		if icon_name != "":
+			var icon_path = "res://assets/blocks/icons/" + icon_name
+			if ResourceLoader.exists(icon_path):
+				var tex = load(icon_path)
+				btn.icon = tex
+				btn.expand_icon = true
+			else:
+				btn.text = block.get("name", block_id)
+		else:
+			btn.text = block.get("name", block_id)
+		
 		btn.pressed.connect(_on_block_pressed.bind(block_id))
 		block_grid.add_child(btn)
 

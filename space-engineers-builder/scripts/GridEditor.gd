@@ -4,6 +4,7 @@ extends Node3D
 @onready var camera: Camera3D = $Camera3D
 @onready var block_preview: MeshInstance3D = $BlockPreview
 
+var tool_start_cell = null  # primer clic de la herramienta
 var selected_block_id: String = "MeshInstance3D"
 var placed_blocks: Dictionary = {}
 var is_placing: bool = true
@@ -77,24 +78,42 @@ func _update_preview_rotation():
 func _process(delta):
 	var mouse_pos = get_viewport().get_mouse_position()
 	
-	if is_placing:
+	if current_tool == "pincel":
+		if is_placing:
+			var cell = _get_cell_at_mouse(mouse_pos)
+			if cell != null:
+				if placed_blocks.has(cell):
+					block_preview.visible = false
+					return
+				block_preview.visible = true
+				var target_pos = grid_map.map_to_local(cell)
+				block_preview.position = block_preview.position.lerp(target_pos, 20.0 * delta)
+			else:
+				block_preview.visible = false
+		else:
+			var cell = _get_cell_under_mouse(mouse_pos)
+			if cell != null and placed_blocks.has(cell):
+				block_preview.visible = true
+				block_preview.position = grid_map.map_to_local(cell)
+			else:
+				block_preview.visible = false
+	elif current_tool == "linea":
+		_update_line_preview(mouse_pos)
+
+func _update_line_preview(mouse_pos: Vector2):
+	if tool_start_cell == null:
+		# Mostrar preview simple del primer punto
 		var cell = _get_cell_at_mouse(mouse_pos)
 		if cell != null:
-			if placed_blocks.has(cell):
-				block_preview.visible = false
-				return
-			block_preview.visible = true
-			var target_pos = grid_map.map_to_local(cell)
-			block_preview.position = block_preview.position.lerp(target_pos, 20.0 * delta)
-		else:
-			block_preview.visible = false
-	else:
-		var cell = _get_cell_under_mouse(mouse_pos)
-		if cell != null and placed_blocks.has(cell):
 			block_preview.visible = true
 			block_preview.position = grid_map.map_to_local(cell)
 		else:
 			block_preview.visible = false
+	else:
+		# Mostrar preview de toda la línea
+		var cell = _get_cell_at_mouse(mouse_pos)
+		if cell != null:
+			_show_line_preview(tool_start_cell, cell)
 
 func _get_cell_at_mouse(mouse_pos: Vector2):
 	var from = camera.project_ray_origin(mouse_pos)
@@ -135,14 +154,56 @@ func _get_cell_under_mouse(mouse_pos: Vector2):
 	return null
 
 func _handle_click(mouse_pos: Vector2):
-	if is_placing:
-		var cell = _get_cell_at_mouse(mouse_pos)
-		if cell != null:
-			_place_block(cell)
+	if current_tool == "pincel":
+		if is_placing:
+			var cell = _get_cell_at_mouse(mouse_pos)
+			if cell != null:
+				_place_block(cell)
+		else:
+			var cell = _get_cell_under_mouse(mouse_pos)
+			if cell != null:
+				_remove_block(cell)
+	elif current_tool == "linea":
+		_handle_line_tool(mouse_pos)
+
+func _handle_line_tool(mouse_pos: Vector2):
+	var cell = _get_cell_at_mouse(mouse_pos)
+	if cell == null:
+		return
+	
+	if tool_start_cell == null:
+		tool_start_cell = cell
+		print("Línea: punto inicial ", cell)
 	else:
-		var cell = _get_cell_under_mouse(mouse_pos)
-		if cell != null:
-			_remove_block(cell)
+		var line_cells = _get_line_cells(tool_start_cell, cell)
+		for c in line_cells:
+			if is_placing:
+				_place_block(c)
+			else:
+				_remove_block(c)
+		tool_start_cell = null
+		_hide_line_preview()
+		print("Línea completada: ", line_cells.size(), " bloques")
+
+func _get_line_cells(start: Vector3i, end: Vector3i) -> Array:
+	var cells = []
+	var dx = end.x - start.x
+	var dy = end.y - start.y
+	var dz = end.z - start.z
+	
+	var steps = max(abs(dx), max(abs(dy), abs(dz)))
+	if steps == 0:
+		cells.append(start)
+		return cells
+	
+	for i in range(steps + 1):
+		var t = float(i) / float(steps)
+		var x = round(start.x + dx * t)
+		var y = round(start.y + dy * t)
+		var z = round(start.z + dz * t)
+		cells.append(Vector3i(x, y, z))
+	
+	return cells
 
 func _place_block(cell: Vector3i):
 	var item = grid_map.mesh_library.find_item_by_name("MeshInstance3D")
@@ -234,3 +295,43 @@ func _on_block_catalog_size_changed(size: String):
 	placed_blocks.clear()
 	emit_signal("block_placed", placed_blocks)
 	print("Tamaño cambiado a: ", size)
+
+var current_tool: String = "pincel"
+var is_hollow: bool = false
+
+func set_tool(tool_name: String):
+	current_tool = tool_name
+	print("Herramienta activa: ", tool_name)
+
+func set_hollow(hollow: bool):
+	is_hollow = hollow
+	print("Hueco: ", hollow)
+	
+var line_preview_meshes: Array = []
+
+func _show_line_preview(start: Vector3i, end: Vector3i):
+	var cells = _get_line_cells(start, end)
+	
+	# Crear más meshes de preview si faltan
+	while line_preview_meshes.size() < cells.size():
+		var mesh_instance = MeshInstance3D.new()
+		var box = BoxMesh.new()
+		box.size = Vector3(1, 1, 1)
+		mesh_instance.mesh = box
+		mesh_instance.material_override = mat_place
+		add_child(mesh_instance)
+		line_preview_meshes.append(mesh_instance)
+	
+	# Posicionar y mostrar los necesarios
+	for i in range(line_preview_meshes.size()):
+		if i < cells.size():
+			line_preview_meshes[i].visible = true
+			line_preview_meshes[i].position = grid_map.map_to_local(cells[i])
+		else:
+			line_preview_meshes[i].visible = false
+	
+	block_preview.visible = false
+
+func _hide_line_preview():
+	for mesh in line_preview_meshes:
+		mesh.visible = false

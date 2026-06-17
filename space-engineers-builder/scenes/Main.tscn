@@ -5,6 +5,8 @@
 [ext_resource type="PackedScene" uid="uid://bxymxbcipuxd3" path="res://scenes/ui/BlockCatalog.tscn" id="2_rvslj"]
 [ext_resource type="PackedScene" uid="uid://ckyit8i24xfxs" path="res://scenes/ui/MaterialsPanel.tscn" id="3_0bbpv"]
 [ext_resource type="PackedScene" uid="uid://dr6gr06rf6dox" path="res://scenes/BlueprintExport.tscn" id="4_rarhs"]
+[ext_resource type="PackedScene" uid="uid://by65s8kelprl5" path="res://scenes/ui/Toolbar.tscn" id="5_c01mt"]
+[ext_resource type="Script" uid="uid://bh1u4a4on11hx" path="res://scripts/Toolbar.gd" id="6_nxtc6"]
 
 [node name="Node" type="Node" unique_id=844077303]
 script = ExtResource("1_vcsgt")
@@ -16,14 +18,24 @@ layer = 2
 
 [node name="BlockCatalog" parent="CanvasLayer" unique_id=137198268 instance=ExtResource("2_rvslj")]
 custom_minimum_size = Vector2(200, 0)
+anchors_preset = -1
+offset_top = 40.0
 offset_right = 154.0
 
 [node name="MaterialsPanel" parent="CanvasLayer" unique_id=2135652470 instance=ExtResource("3_0bbpv")]
 custom_minimum_size = Vector2(200, 0)
-anchors_preset = 11
+anchors_preset = -1
 anchor_left = 1.0
 offset_left = -123.0
+offset_top = 40.0
 grow_horizontal = 0
+
+[node name="Toolbar" parent="CanvasLayer" unique_id=21777613 instance=ExtResource("5_c01mt")]
+anchors_preset = 10
+anchor_bottom = 0.0
+offset_bottom = 31.0
+grow_vertical = 1
+script = ExtResource("6_nxtc6")
 
 [node name="BlueprintExport" parent="." unique_id=179724670 instance=ExtResource("4_rarhs")]
 
@@ -40,3 +52,11 @@ filters = PackedStringArray("*.json")
 [connection signal="cargar_nave" from="CanvasLayer/MaterialsPanel" to="." method="_on_materials_panel_cargar_nave"]
 [connection signal="exportar_plano" from="CanvasLayer/MaterialsPanel" to="." method="_on_materials_panel_exportar_plano"]
 [connection signal="guardar_nave" from="CanvasLayer/MaterialsPanel" to="." method="_on_materials_panel_guardar_nave"]
+[connection signal="cargar_presionado" from="CanvasLayer/Toolbar" to="." method="_on_toolbar_cargar_presionado"]
+[connection signal="deshacer_presionado" from="CanvasLayer/Toolbar" to="." method="_on_toolbar_deshacer_presionado"]
+[connection signal="exportar_presionado" from="CanvasLayer/Toolbar" to="." method="_on_toolbar_exportar_presionado"]
+[connection signal="guardar_presionado" from="CanvasLayer/Toolbar" to="." method="_on_toolbar_guardar_presionado"]
+[connection signal="herramienta_cambiada" from="CanvasLayer/Toolbar" to="." method="_on_toolbar_herramienta_cambiada"]
+[connection signal="hueco_cambiado" from="CanvasLayer/Toolbar" to="." method="_on_toolbar_hueco_cambiado"]
+[connection signal="nuevo_presionado" from="CanvasLayer/Toolbar" to="." method="_on_toolbar_nuevo_presionado"]
+[connection signal="rehacer_presionado" from="CanvasLayer/Toolbar" to="." method="_on_toolbar_rehacer_presionado"]

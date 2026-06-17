@@ -1,9 +1,72 @@
 [gd_scene format=3 uid="uid://by65s8kelprl5"]
 
-[node name="Toolbar" type="Control" unique_id=851296213]
-layout_mode = 3
+[node name="Toolbar" type="PanelContainer" unique_id=21777613]
 anchors_preset = 15
 anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
+
+[node name="HBoxContainer" type="HBoxContainer" parent="." unique_id=773986524]
+layout_mode = 2
+
+[node name="BtnNuevo" type="Button" parent="HBoxContainer" unique_id=631078340]
+layout_mode = 2
+text = "Nuevo"
+
+[node name="BtnGuardar" type="Button" parent="HBoxContainer" unique_id=467437232]
+layout_mode = 2
+text = "Guardar"
+
+[node name="BtnCargar" type="Button" parent="HBoxContainer" unique_id=636332777]
+layout_mode = 2
+text = "Cargar"
+
+[node name="BtnExportar" type="Button" parent="HBoxContainer" unique_id=1397020449]
+layout_mode = 2
+text = "Exportar"
+
+[node name="VSeparator" type="VSeparator" parent="HBoxContainer" unique_id=1570919075]
+layout_mode = 2
+
+[node name="BtnPincel" type="Button" parent="HBoxContainer" unique_id=922107768]
+layout_mode = 2
+text = "✏️"
+
+[node name="BtnLinea" type="Button" parent="HBoxContainer" unique_id=1411086956]
+layout_mode = 2
+text = "📏"
+
+[node name="BtnPlano" type="Button" parent="HBoxContainer" unique_id=1582867049]
+layout_mode = 2
+text = "▭"
+
+[node name="BtnCubo" type="Button" parent="HBoxContainer" unique_id=189162752]
+layout_mode = 2
+text = "⬜"
+
+[node name="BtnEsfera" type="Button" parent="HBoxContainer" unique_id=1003161101]
+layout_mode = 2
+text = "⭕"
+
+[node name="BtnTriangulo" type="Button" parent="HBoxContainer" unique_id=1853660358]
+layout_mode = 2
+text = "△"
+
+[node name="VSeparator2" type="VSeparator" parent="HBoxContainer" unique_id=458536663]
+layout_mode = 2
+
+[node name="BtnHueco" type="Button" parent="HBoxContainer" unique_id=1643812151]
+layout_mode = 2
+text = "Hueco"
+
+[node name="VSeparator3" type="VSeparator" parent="HBoxContainer" unique_id=1295677779]
+layout_mode = 2
+
+[node name="BtnDeshacer" type="Button" parent="HBoxContainer" unique_id=461304094]
+layout_mode = 2
+text = "↩"
+
+[node name="BtnRehacer" type="Button" parent="HBoxContainer" unique_id=1276916445]
+layout_mode = 2
+text = "↪"
