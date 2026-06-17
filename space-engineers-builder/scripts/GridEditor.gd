@@ -4,6 +4,7 @@ extends Node3D
 @onready var camera: Camera3D = $Camera3D
 @onready var block_preview: MeshInstance3D = $BlockPreview
 
+var tool_second_cell = null
 var tool_start_cell = null  # primer clic de la herramienta
 var selected_block_id: String = "MeshInstance3D"
 var placed_blocks: Dictionary = {}
@@ -184,6 +185,105 @@ func _handle_click(mouse_pos: Vector2):
 		_handle_line_tool(mouse_pos)
 	elif current_tool == "plano":
 		_handle_plano_tool(mouse_pos)
+	elif current_tool == "cubo":
+		_handle_cubo_tool(mouse_pos)
+
+
+func _handle_cubo_tool(mouse_pos: Vector2):
+	if tool_start_cell == null:
+		var cell = _get_cell_at_mouse(mouse_pos)
+		if cell == null:
+			return
+		tool_start_cell = cell
+		print("Cubo: punto inicial ", cell)
+	elif tool_second_cell == null:
+		var cell = _get_cell_at_mouse(mouse_pos)
+		if cell == null:
+			return
+		tool_second_cell = cell
+		print("Cubo: área definida ", cell)
+	else:
+		var height = _get_height_from_mouse(mouse_pos)
+		var cubo_cells = _get_cubo_cells_3click(tool_start_cell, tool_second_cell, height)
+		if is_placing:
+			_place_blocks_batch(cubo_cells)
+		else:
+			_remove_blocks_batch(cubo_cells)
+		tool_start_cell = null
+		tool_second_cell = null
+		_hide_line_preview()
+		print("Cubo completado: ", cubo_cells.size(), " bloques")
+		
+
+func _place_blocks_batch(cells: Array):
+	var item = grid_map.mesh_library.find_item_by_name("MeshInstance3D")
+	var basis = _rotation_to_basis()
+	var block_data = BlockDatabase.get_block(selected_block_id)
+	var block_size = block_data.get("block_size", {"x": 1, "y": 1, "z": 1})
+	
+	for cell in cells:
+		var occupied_cells = _get_occupied_cells(cell, block_size, current_rotation)
+		var can_place = true
+		for c in occupied_cells:
+			if placed_blocks.has(c):
+				can_place = false
+				break
+		if not can_place:
+			continue
+		
+		grid_map.set_cell_item(cell, item, basis)
+		for c in occupied_cells:
+			placed_blocks[c] = {
+				"id": selected_block_id,
+				"rotation": current_rotation,
+				"origin": cell
+			}
+	
+	emit_signal("block_placed", placed_blocks)
+
+func _get_height_from_mouse(mouse_pos: Vector2) -> int:
+	# Usamos la distancia vertical del mouse desde el punto de partida
+	# para determinar cuántos niveles sube/baja
+	var from = camera.project_ray_origin(mouse_pos)
+	var direction = camera.project_ray_normal(mouse_pos)
+	
+	var base_pos = grid_map.map_to_local(tool_second_cell)
+	
+	# Proyectar el rayo sobre un plano vertical que pasa por el punto base
+	var plane_normal = Vector3(direction.x, 0, direction.z).normalized()
+	if plane_normal.length() < 0.01:
+		plane_normal = Vector3(1, 0, 0)
+	
+	var plane = Plane(plane_normal, base_pos)
+	var hit = plane.intersects_ray(from, direction)
+	
+	if hit:
+		var height = hit.y - base_pos.y
+		return int(round(height))
+	return 0
+
+func _get_cubo_cells_3click(start: Vector3i, area_end: Vector3i, height: int) -> Array:
+	var cells = []
+	var min_x = min(start.x, area_end.x)
+	var max_x = max(start.x, area_end.x)
+	var min_z = min(start.z, area_end.z)
+	var max_z = max(start.z, area_end.z)
+	var base_y = start.y
+	
+	var min_y = min(base_y, base_y + height)
+	var max_y = max(base_y, base_y + height)
+	
+	for x in range(min_x, max_x + 1):
+		for y in range(min_y, max_y + 1):
+			for z in range(min_z, max_z + 1):
+				if is_hollow:
+					var is_edge = x == min_x or x == max_x or y == min_y or y == max_y or z == min_z or z == max_z
+					if is_edge:
+						cells.append(Vector3i(x, y, z))
+				else:
+					cells.append(Vector3i(x, y, z))
+	
+	return cells
 
 func _handle_plano_tool(mouse_pos: Vector2):
 	var cell = _get_cell_at_mouse(mouse_pos)
@@ -195,14 +295,29 @@ func _handle_plano_tool(mouse_pos: Vector2):
 		print("Plano: esquina inicial ", cell)
 	else:
 		var plano_cells = _get_plano_cells(tool_start_cell, cell)
-		for c in plano_cells:
-			if is_placing:
-				_place_block(c)
-			else:
-				_remove_block(c)
+		if is_placing:
+			_place_blocks_batch(plano_cells)
+		else:
+			_remove_blocks_batch(plano_cells)
 		tool_start_cell = null
 		_hide_line_preview()
 		print("Plano completado: ", plano_cells.size(), " bloques")
+
+func _remove_blocks_batch(cells: Array):
+	for cell in cells:
+		if not placed_blocks.has(cell):
+			continue
+		var origin = placed_blocks[cell].get("origin", cell)
+		var block_id = placed_blocks[cell].get("id", "")
+		var rotation = placed_blocks[cell].get("rotation", Vector3i(0, 0, 0))
+		var block_data = BlockDatabase.get_block(block_id)
+		var block_size = block_data.get("block_size", {"x": 1, "y": 1, "z": 1})
+		var occupied = _get_occupied_cells(origin, block_size, rotation)
+		for c in occupied:
+			placed_blocks.erase(c)
+			grid_map.set_cell_item(c, GridMap.INVALID_CELL_ITEM)
+	
+	emit_signal("block_removed", placed_blocks)
 
 func _get_plano_cells(start: Vector3i, end: Vector3i) -> Array:
 	var cells = []
@@ -233,11 +348,10 @@ func _handle_line_tool(mouse_pos: Vector2):
 		print("Línea: punto inicial ", cell)
 	else:
 		var line_cells = _get_line_cells(tool_start_cell, cell)
-		for c in line_cells:
-			if is_placing:
-				_place_block(c)
-			else:
-				_remove_block(c)
+		if is_placing:
+			_place_blocks_batch(line_cells)
+		else:
+			_remove_blocks_batch(line_cells)
 		tool_start_cell = null
 		_hide_line_preview()
 		print("Línea completada: ", line_cells.size(), " bloques")
