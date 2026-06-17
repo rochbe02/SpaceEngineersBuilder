@@ -48,6 +48,10 @@ layout_mode = 2
 layout_mode = 2
 placeholder_text = "Nombre de la nave"
 
+[node name="AuthorName" type="LineEdit" parent="VBoxContainer" unique_id=144658251]
+layout_mode = 2
+placeholder_text = "Tu nombre (Firma)"
+
 [node name="Button (BtnGuardar)" type="Button" parent="VBoxContainer" unique_id=1839468889]
 layout_mode = 2
 text = "Guardar Nave"

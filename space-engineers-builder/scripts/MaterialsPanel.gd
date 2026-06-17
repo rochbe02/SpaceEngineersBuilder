@@ -4,6 +4,7 @@ signal exportar_plano
 signal guardar_nave(ship_name: String)
 signal cargar_nave
 
+@onready var author_name: LineEdit = $VBoxContainer/AuthorName
 @onready var materials_list: VBoxContainer = $"VBoxContainer/ScrollContainer/MaterialsList"
 @onready var pcu_value: Label = $VBoxContainer/HBoxContainer/PCUValue
 @onready var btn_exportar: Button = $VBoxContainer/BtnExportar
@@ -74,3 +75,6 @@ func _on_viewport_3d_block_placed(placed_blocks: Dictionary):
 
 func _on_viewport_3d_block_removed(placed_blocks: Dictionary):
 	update_stats(placed_blocks)
+	
+func get_author_name() -> String:
+	return author_name.text.strip_edges()

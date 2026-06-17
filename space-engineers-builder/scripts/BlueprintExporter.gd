@@ -1,7 +1,16 @@
 extends Node
 
 var font: FontFile
+var meta_ship_name: String = ""
+var meta_author: String = ""
+var meta_block_count: int = 0
+var meta_pcu: int = 0
+var meta_date: String = ""
 
+@onready var label_ship_name = $"LabelViewport/SubViewport/Control/LabelShipName"
+@onready var label_date = $"LabelViewport/SubViewport/Control/LabelDate"
+@onready var label_blocks = $"LabelViewport/SubViewport/Control/LabelBlocks"
+@onready var label_author = $"LabelViewport/SubViewport/Control/LabelAuthor"
 @onready var vp_labels = $"LabelViewport/SubViewport"
 @onready var cam_top = $"SubViewportContainer(Top)/SubViewport/Camera3D"
 @onready var cam_front = $"SubViewportContainer(Front)/SubViewport/Camera3D"
@@ -14,6 +23,24 @@ var font: FontFile
 
 func _ready():
 	font = load("res://assets/fonts/04B_20__.ttf")
+
+func set_metadata(ship_name: String, author: String, placed_blocks: Dictionary):
+	meta_ship_name = ship_name if ship_name != "" else "Sin nombre"
+	meta_author = author if author != "" else "Anonimo"
+	meta_date = Time.get_date_string_from_system()
+	
+	var origins = {}
+	for cell in placed_blocks:
+		var block = placed_blocks[cell]
+		var origin = block.get("origin", cell)
+		origins[origin] = true
+	meta_block_count = origins.size()
+	
+	meta_pcu = 0
+	for cell in origins:
+		var block_id = placed_blocks[cell].get("id", "")
+		var block = BlockDatabase.get_block(block_id)
+		meta_pcu += block.get("pcu", 0)
 
 func setup_cameras(placed_blocks: Dictionary, grid_map: GridMap):
 	if placed_blocks.is_empty():
@@ -88,6 +115,12 @@ func export_blueprint(_path: String):
 	var final_img = Image.create(final_w, final_h, false, Image.FORMAT_RGBA8)
 	final_img.fill(Color(0.05, 0.1, 0.25, 1.0))
 	
+	# Grid de puntos
+	var dot_color = Color(0.15, 0.25, 0.5, 1.0)
+	for y in range(0, final_h, 20):
+		for x in range(0, final_w, 20):
+			final_img.set_pixel(x, y, dot_color)
+	
 	var positions = [
 		Vector2i(padding, padding + label_height),
 		Vector2i(w + padding * 2, padding + label_height),
@@ -106,6 +139,12 @@ func export_blueprint(_path: String):
 	for x in range(final_w):
 		for y in range(2):
 			final_img.set_pixel(x, h + padding + label_height + padding/2 + y, line_color)
+	
+	# Actualizar labels con metadata
+	label_ship_name.text = meta_ship_name
+	label_date.text = "Fecha: " + meta_date
+	label_blocks.text = "Bloques: " + str(meta_block_count) + "  PCU: " + str(meta_pcu)
+	label_author.text = "Autor: " + meta_author
 	
 	# Renderizar etiquetas
 	vp_labels.render_target_update_mode = SubViewport.UPDATE_ONCE
